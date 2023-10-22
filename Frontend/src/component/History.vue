@@ -45,9 +45,7 @@ const editHistory = async (updatedHistory) => {
 
     console.log('Customer Type:', updatedHistory.customerType);
     
-    // ตรวจสอบว่า updatedHistory.numList เป็น array หรือไม่
     if (Array.isArray(updatedHistory.numList)) {
-        // แปลง updatedHistory.numList เป็น JSON string
         updatedHistory.numList = JSON.stringify(updatedHistory.numList);
     }
 
@@ -98,9 +96,16 @@ const formatDateTime = (dateTimeString) => {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
+        hour12: true,
     };
+
     const date = new Date(dateTimeString);
-    return date.toLocaleString('en-US', options).replace(',', '') + ' ' + (date.getHours() < 12 ? 'AM' : 'PM');
+    
+    date.setHours(date.getHours() - 7);
+
+    const formattedDateTime = date.toLocaleString('en-US', options).replace(',', '');
+    
+    return formattedDateTime;
 }
 
 </script>
@@ -150,13 +155,10 @@ const formatDateTime = (dateTimeString) => {
 .Title {
     width: 100%;
     height: 4rem;
-    /* 4rem เทียบเท่ากับ h-16 */
     display: flex;
     align-items: center;
     font-size: 40px;
-    /* 2rem เทียบเท่ากับ text-2xl */
     font-weight: 700;
-    /* 500 เทียบเท่ากับ font-medium */
     color: #ffffff;
 }
 
@@ -190,8 +192,6 @@ const formatDateTime = (dateTimeString) => {
     border: 1px solid #acacac3d;
     border-radius: 1.5rem;
     background-color: rgba(255, 255, 255, 0.6);
-    /* กำหนดสีพื้นหลังโปร่งใส */
     box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
-    /* ใช้ backdrop-filter เพื่อให้มี Glass Effect */
 }</style>
