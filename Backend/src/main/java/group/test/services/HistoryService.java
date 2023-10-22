@@ -4,6 +4,7 @@ import group.test.dtos.HistoryDto;
 import group.test.entities.History;
 import group.test.repositories.HistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +15,9 @@ public class HistoryService {
     @Autowired
     private HistoryRepository historyRepository;
 
-    public List<History> getAllPlayers(){
-        return historyRepository.findAll();
+    public List<History> getAllPlayers() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        return historyRepository.findAll(sort);
     }
 
     public History findById(Integer id) {
