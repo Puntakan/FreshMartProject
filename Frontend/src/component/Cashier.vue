@@ -16,27 +16,21 @@ const props = defineProps({
 const updated = ref({})
 
 onMounted(() => {
-    // Add mode 
     if (props.history === undefined) {
         updated.value = {
-            numList: [],  // กำหนด numList เป็นอาร์เรย์เปล่า
+            numList: [],
             dateTime: "",
-            customerType: "Guest", // ตั้งค่าเริ่มต้นเป็น Guest
+            customerType: "Guest",
             subTotal: 0,
-            discount: 0, // ตั้งค่าเริ่มต้นเป็น 0
+            discount: 0,
             total: 0,
         }
     }
-    // Edit mode
     else {
-    // เปลี่ยนประเภทของ numList จาก String เป็นอาร์เรย์ของจำนวนเต็ม
-    updated.value = props.history;
-    updated.value.numList = JSON.parse(updated.value.numList);
-
-
-    console.log(props)
-    console.log(emits)
-}
+        updated.value = props.history;
+        updated.value.numList = JSON.parse(updated.value.numList);
+        console.log(props)
+    }
 })
 
 const addedNumList = ref([]);
@@ -74,9 +68,8 @@ const deleteItemList = (index) => {
 }
 
 const subTotal = () => {
-    let numList = updated.value.numList || []; // Initialize as an empty array if numList is undefined
+    let numList = updated.value.numList || [];
     if (!Array.isArray(numList)) {
-        // If numList is not an array, try to convert it to an array
         try {
             numList = JSON.parse(numList);
         } catch (error) {
@@ -85,7 +78,6 @@ const subTotal = () => {
         }
     }
 
-    // Now numList is guaranteed to be an array
     let calSubTotal = numList.reduce((acc, curr) => acc + (+curr), 0);
     updated.value.subTotal = calSubTotal;
 
@@ -167,9 +159,7 @@ const calculateSubTotalAndSendToBackend = async () => {
             body: JSON.stringify(sendData)
         });
         if (res.status === 201) {
-            // Data sent successfully
             console.log('Add successfully');
-            // Reset the data after sending
             updated.value = {
                 numList: [],
                 dateTime: "",
@@ -178,7 +168,7 @@ const calculateSubTotalAndSendToBackend = async () => {
                 discount: 0,
                 total: 0,
             };
-            addedNumList.value = []; // เคลียร์ addedNumList ให้ว่าง
+            addedNumList.value = [];
         } else {
             throw Error('Oops, sorry cannot add');
         }
@@ -201,14 +191,12 @@ const finishEdit = () => {
 </script>
  
 <template>
-    <!-- Cashier -->
     <div class="Title ">
         <div class="mx-40">
             Cashier Calculator
         </div>
     </div>
 
-    <!-- input & show -->
     <div class="CalculateBorder">
         <div class="flex flex-col">
 
@@ -290,7 +278,7 @@ const finishEdit = () => {
             </div>
         </div>
 
-        <div class="flex justify-end my-3">
+        <div class="flex justify-end my-1 ">
             <button class="w-20 h-10 flex justify-center items-center bg-red-600 rounded-lg text-sm text-white mb-2 mr-14"
                 v-if="updated.id" @click="$emit('edit', updated)">
                 Confirm
@@ -312,13 +300,10 @@ const finishEdit = () => {
 .Title {
     width: 100%;
     height: 4rem;
-    /* 4rem เทียบเท่ากับ h-16 */
     display: flex;
     align-items: center;
     font-size: 1.5rem;
-    /* 2rem เทียบเท่ากับ text-2xl */
     font-weight: 700;
-    /* 500 เทียบเท่ากับ font-medium */
     color: #ffffff;
 }
 
@@ -328,32 +313,21 @@ const finishEdit = () => {
     margin: 0 auto;
     border-radius: 1.5rem;
     background-color: rgba(222, 222, 222, 0.6);
-    /* กำหนดสีพื้นหลังโปร่งใส */
     box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
-    /* ใช้ backdrop-filter เพื่อให้มี Glass Effect */
 }
 
 .Button {
     width: 5rem;
-    /* w-20 เทียบเท่ากับ 5rem */
     height: 2.5rem;
-    /* h-10 เทียบเท่ากับ 2.5rem */
     display: flex;
     justify-content: center;
-    /* justify-center เทียบเท่ากับ justify-content: center; */
     align-items: center;
-    /* items-center เทียบเท่ากับ align-items: center; */
     border-radius: 0.5rem;
-    /* rounded-lg เทียบเท่ากับ border-radius: 0.5rem; */
     font-size: 1rem;
-    /* text-sm เทียบเท่ากับ font-size: 1rem; */
     color: #fff;
-    /* text-white เทียบเท่ากับ color: #fff; */
     margin-bottom: 0.5rem;
-    /* mb-2 เทียบเท่ากับ margin-bottom: 0.5rem; */
     margin-right: 3.5rem;
-    /* mr-14 เทียบเท่ากับ margin-right: 3.5rem; */
     background-color: #cc7648;
 }
 </style>
